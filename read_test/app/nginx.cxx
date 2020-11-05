@@ -26,9 +26,13 @@ int main(int argc, char *const *argv){
     std::cout << p_config->GetString("ListenPort") << std::endl;
     std::cout << p_config->GetInt("ListenPort") << std::endl;
     std::cout << p_config->GetString("DBInfo") << std::endl;
-    while(true){
+    /*while(true){
         std::cout << "test\n";
         sleep(1);
+    }*/
+    if(gp_envmem != NULL){
+        delete[] gp_envmem;
+        std::cout << "the char[] is deconstruct\n";
     }
     return 0;
 }
