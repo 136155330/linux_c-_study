@@ -30,6 +30,7 @@ public:
             }
             return instance_ptr;
         }
+        return instance_ptr;
     }
 };
 

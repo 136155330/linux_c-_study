@@ -1,0 +1,5 @@
+2020/11/07 22:08:37 [warn] 30057: 这个XXX工作的有问题,显示的结果是=YYYY (8: Exec format error) 
+2020/11/07 22:10:13 [warn] 30189: 这个XXX工作的有问题,显示的结果是=YYYY (8: Exec format error) 
+2020/11/07 22:10:13 [warn] 30189: 这个XXX工作的有问题,显示的结果是=hello_word (8: Exec format error) 
+2020/11/07 22:10:13 [warn] 30189: 这个XXX工作的有问题,显示的结果是=XXXX (8: Exec format error) 
+2020/11/07 22:10:13 [warn] 30189: 这个XXX工作的有问题,显示的结果是=ZZZZ (8: Exec format error) 
