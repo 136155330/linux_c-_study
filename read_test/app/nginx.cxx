@@ -18,6 +18,7 @@ char * gp_envmem = nullptr;
 int g_environlen = 0;
 blocking_queue<std::string> log_blocking_queue;
 pid_t ngx_pid;
+pid_t ngx_parent;
 void print_log(){
     while(true){
     std::string word = log_blocking_queue.take();
@@ -44,6 +45,7 @@ void print_log(){
 }
 int main(int argc, char *const *argv){
     ngx_pid = getpid();
+    ngx_parent = getppid(); 
     g_os_argv = (char **)argv;
     gp_envmem = nullptr;
     g_environlen = 0;
@@ -55,17 +57,7 @@ int main(int argc, char *const *argv){
         exit(1);
     }
     ngx_log_init();
-    std::thread t1(print_log);
-    std::thread t2(print_log);
-    log_blocking_queue.put(ngx_log_error_blocking_queue_core_str(5,8,"这个XXX工作的有问题,显示的结果是=%s","YYYY"));
-    log_blocking_queue.put(ngx_log_error_blocking_queue_core_str(5,8,"这个XXX工作的有问题,显示的结果是=%s","hello_word"));
-    log_blocking_queue.put(ngx_log_error_blocking_queue_core_str(5,8,"这个XXX工作的有问题,显示的结果是=%s","XXXX"));
-    log_blocking_queue.put(ngx_log_error_blocking_queue_core_str(5,8,"这个XXX工作的有问题,显示的结果是=%s","ZZZZ"));
-    sleep(5);
-    while(true){
-        std::cout << "test\n";
-        sleep(1);
-    }
+    ngx_master_process_cycle();
     if(gp_envmem != NULL){
         delete[] gp_envmem;
         std::cout << "the char[] is deconstruct\n";
