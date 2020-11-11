@@ -1,7 +1,7 @@
 #ifndef __NGX_GBLDEF_H__
 #define __NGX_GBLDEF_H__
 #include "blocking_queue.h"
-
+#include <signal.h>
 //和运行日志相关 
 typedef struct
 {
@@ -13,9 +13,12 @@ typedef struct
 extern char **g_os_argv;
 extern char * gp_envmem;
 extern int g_environlen;
+extern int g_daemonized;
 
 extern pid_t       ngx_pid;
 extern pid_t       ngx_parent;
 extern ngx_log_t   ngx_log;
 extern blocking_queue<std::string> log_blocking_queue;
+extern int           ngx_process;   
+extern sig_atomic_t  ngx_reap;
 #endif

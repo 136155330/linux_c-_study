@@ -53,6 +53,11 @@ void ngx_master_process_cycle(){
         if(flag < 10)
         log_blocking_queue.put(ngx_log_error_blocking_queue_core_str(0,0,"haha--这是父进程，pid为%P",ngx_pid));
         if(flag < 10)  flag ++;
+        if(flag == 10)break;
+    }
+    while(true){
+        sigsuspend(&set);
+        sleep(1);
     }
 }
 

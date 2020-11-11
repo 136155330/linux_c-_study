@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <thread>
 #include <pthread.h>
+#include "ngx_macro.h"
 #include "ngx_c_conf.h"
 #include "ngx_global.h"
 #include "ngx_c_func.h"
@@ -19,6 +20,9 @@ int g_environlen = 0;
 blocking_queue<std::string> log_blocking_queue;
 pid_t ngx_pid;
 pid_t ngx_parent;
+int ngx_process;
+sig_atomic_t  ngx_reap;
+int g_daemonized=0;
 void print_log(){
     while(true){
     std::string word = log_blocking_queue.take();
@@ -43,7 +47,25 @@ void print_log(){
         }
     }
 }
+void freeresource()
+{
+    //(1)对于因为设置可执行程序标题导致的环境变量分配的内存，我们应该释放
+    if(gp_envmem)
+    {
+        delete []gp_envmem;
+        gp_envmem = NULL;
+        std::cout << "the char[] is deconstruct\n";
+    }
+
+    //(2)关闭日志文件
+    if(ngx_log.fd != STDERR_FILENO && ngx_log.fd != -1)  
+    {        
+        close(ngx_log.fd); //不用判断结果了
+        ngx_log.fd = -1; //标记下，防止被再次close吧        
+    }
+}
 int main(int argc, char *const *argv){
+    ngx_process = NGX_PROCESS_MASTER;
     ngx_pid = getpid();
     ngx_parent = getppid(); 
     g_os_argv = (char **)argv;
@@ -57,16 +79,31 @@ int main(int argc, char *const *argv){
         exit(1);
     }
     ngx_log_init();
+    if(ngx_init_signals() != 0){
+        freeresource();
+        return 1;
+    }
+    if(p_config->GetInt("Daemon") == 1){
+        int cdaemonresult = ngx_daemon();
+        if(cdaemonresult == -1){
+            freeresource();
+            return 1;
+        }
+        if(cdaemonresult == 1){
+            freeresource();
+            return 0;
+        }
+        g_daemonized = 1;
+    }
     ngx_master_process_cycle();
     if(gp_envmem != NULL){
         delete[] gp_envmem;
         std::cout << "the char[] is deconstruct\n";
     }
-    /*
+    
     if(ngx_log.fd != STDERR_FILENO && ngx_log.fd != -1){
         close(ngx_log.fd);
         ngx_log.fd = -1;
     }
-    */
     return 0;
 }

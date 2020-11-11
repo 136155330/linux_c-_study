@@ -17,4 +17,6 @@ u_char *ngx_slprintf(u_char *buf, u_char *last, const char *fmt, ...);
 u_char *ngx_vslprintf(u_char *buf, u_char *last,const char *fmt,va_list args);
 
 void ngx_master_process_cycle();
+int ngx_daemon();
+int ngx_init_signals();
 #endif  
