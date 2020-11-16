@@ -11,6 +11,7 @@
 #include "ngx_c_conf.h"
 #include "ngx_global.h"
 #include "ngx_c_func.h"
+#include "ngx_c_socket.h"
 #include "blocking_queue.h"
 std::mutex CConfig::Config_mutex;
 CConfig::CC_Ptr CConfig::instance_ptr = nullptr;
@@ -23,6 +24,7 @@ pid_t ngx_parent;
 int ngx_process;
 sig_atomic_t  ngx_reap;
 int g_daemonized=0;
+CSocekt g_socket;
 void print_log(){
     while(true){
     std::string word = log_blocking_queue.take();
@@ -80,6 +82,10 @@ int main(int argc, char *const *argv){
     }
     ngx_log_init();
     if(ngx_init_signals() != 0){
+        freeresource();
+        return 1;
+    }
+    if(g_socket.Initialize() == false){
         freeresource();
         return 1;
     }
