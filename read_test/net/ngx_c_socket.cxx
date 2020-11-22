@@ -26,7 +26,14 @@
 //构造函数
 CSocekt::CSocekt()
 {
+    m_worker_connections = 1;//epoll连接最大项数
     m_ListenPortCount = 1;   //监听一个端口
+
+    //epoll相关
+    m_epollhandle = -1;//epoll 返回的句柄
+    m_pconnections = NULL; //连接池为空
+    m_pfree_connections = NULL; //连接池中的空闲连接
+
     return;	
 }
 
@@ -44,20 +51,27 @@ CSocekt::~CSocekt()
     }
     */
 	m_ListenSocketList.clear(); 
+    if(m_pconnections != NULL){
+        delete[] m_pconnections;
+    }
     return;
 }
 bool CSocekt::Initialize()
 {
+    ReadConf();
     bool reco = ngx_open_listening_sockets();
     return reco;
 }
-
-bool CSocekt::ngx_open_listening_sockets()
-{
+void CSocekt::ReadConf(){
     CConfig::CC_Ptr p_config = CConfig::get_instance();
-    m_ListenPortCount = p_config->GetInt("ListenPortCount"); //取得要监听的端口数量
+    m_worker_connections = p_config->GetInt("worker_connections");
+    m_ListenPortCount =  p_config->GetInt("ListenPortCount");
+    if(m_worker_connections == -1)  m_worker_connections = 1;
     if(m_ListenPortCount == -1) m_ListenPortCount = 1;
-    
+    return ;
+}
+bool CSocekt::ngx_open_listening_sockets()
+{   
     int                isock;                //socket
     struct sockaddr_in serv_addr;            //服务器的地址结构体
     int                iport;                //端口
@@ -103,7 +117,11 @@ bool CSocekt::ngx_open_listening_sockets()
         //设置本服务器要监听的地址和端口，这样客户端才能连接到该地址和端口并发送数据        
         strinfo[0] = 0;
         sprintf(strinfo,"ListenPort%d",i);
+        CConfig::CC_Ptr p_config = CConfig::get_instance();
         iport = p_config->GetInt(strinfo);
+        if(iport == -1){
+            return false;
+        }
         serv_addr.sin_port = htons((in_port_t)iport);   //in_port_t其实就是uint16_t
 
         //绑定服务器地址结构体
@@ -129,7 +147,8 @@ bool CSocekt::ngx_open_listening_sockets()
         p_listensocketitem->fd   = isock;                          //套接字木柄保存下来   
         ngx_log_error_core(NGX_LOG_INFO,0,"监听%d端口成功!",iport); //显示一些信息到日志中
         m_ListenSocketList.push_back(p_listensocketitem);          //加入到队列中
-    } //end for(int i = 0; i < m_ListenPortCount; i++)    
+    } //end for(int i = 0; i < m_ListenPortCount; i++) 
+    if(m_ListenSocketList.size() <= 0) return false;  
     return true;
 }
 
@@ -176,3 +195,147 @@ void CSocekt::ngx_close_listening_sockets()
     return;
 }
 
+int CSocekt::ngx_epoll_init(){
+    m_epollhandle = epoll_create(m_worker_connections);
+    if(m_epollhandle == -1){
+        ngx_log_stderr(errno,"CSocekt::ngx_epoll_init()中epoll_create()失败.");
+        exit(2);
+    }
+    //下面为创建连接池
+    m_connection_n = m_worker_connections;//连接池大小==epoll连接数
+    m_pconnections = new ngx_connection_t[m_connection_n];
+    int i = m_connection_n - 1;
+    lpngx_connection_t next = NULL;
+    lpngx_connection_t c = m_pconnections;//c指针指向头结点
+    while(i >= 0){
+        c[i].data = next;
+        c[i].fd = -01;
+        c[i].instance = 1;
+        c[i].iCurrsequence = 0;
+        next = &c[i];
+        i --;
+    }
+    m_pfree_connections = next; //设置空闲的节点
+    m_free_connection_n = m_connection_n;
+    std::vector<lpngx_listening_t>::iterator pos;
+    for(pos = m_ListenSocketList.begin(); pos != m_ListenSocketList.end(); ++ pos){
+        c = ngx_get_connection((*pos)->fd);
+        if(c == NULL){
+            ngx_log_stderr(errno,"CSocekt::ngx_epoll_init()中ngx_get_connection()失败.");
+            exit(2);
+        }
+        c->listening = (*pos); //指向<fd, port>
+        (*pos)->connection = c;//互相指向
+        c->rhandler = &CSocekt::ngx_event_accept;//读事件绑定
+        if(ngx_epoll_add_event(
+                                (*pos)->fd,       //socekt句柄
+                                1,0,             //读，写【只关心读事件，所以参数2：readevent=1,而参数3：writeevent=0】
+                                0,               //其他补充标记
+                                EPOLL_CTL_ADD,   //事件类型【增加，还有删除/修改】
+                                c                //连接池中的连接
+        ) == -1){
+            exit(2);
+        } //这一步把所谓的监听端口放入连接池 并且将其读事件写入epoll中
+    }
+    return 1;
+}
+
+int CSocekt::ngx_epoll_add_event(int fd,
+                                int readevent,int writeevent,
+                                uint32_t otherflag, 
+                                uint32_t eventtype, 
+                                lpngx_connection_t c
+                                )
+{
+    struct epoll_event ev;
+    memset(&ev, 0, sizeof(ev));
+    if(readevent==1)
+    {
+        //读事件，这里发现官方nginx没有使用EPOLLERR，因此我们也不用【有些范例中是使用EPOLLERR的】
+        ev.events = EPOLLIN|EPOLLRDHUP; //EPOLLIN读事件，也就是read ready【客户端三次握手连接进来，也属于一种可读事件】   EPOLLRDHUP 客户端关闭连接，断连
+                                          //似乎不用加EPOLLERR，只用EPOLLRDHUP即可，EPOLLERR/EPOLLRDHUP 实际上是通过触发读写事件进行读写操作recv write来检测连接异常
+
+        //ev.events |= (ev.events | EPOLLET);  //只支持非阻塞socket的高速模式【ET：边缘触发】，就拿accetp来说，如果加这个EPOLLET，则客户端连入时，epoll_wait()只会返回一次该事件，
+                    //如果用的是EPOLLLT【水平触发：低速模式】，则客户端连入时，epoll_wait()会被触发多次，一直到用accept()来处理；
+
+
+
+        //https://blog.csdn.net/q576709166/article/details/8649911
+        //找下EPOLLERR的一些说法：
+        //a)对端正常关闭（程序里close()，shell下kill或ctr+c），触发EPOLLIN和EPOLLRDHUP，但是不触发EPOLLERR 和EPOLLHUP。
+        //b)EPOLLRDHUP    这个好像有些系统检测不到，可以使用EPOLLIN，read返回0，删除掉事件，关闭close(fd);如果有EPOLLRDHUP，检测它就可以直到是对方关闭；否则就用上面方法。
+        //c)client 端close()联接,server 会报某个sockfd可读，即epollin来临,然后recv一下 ， 如果返回0再掉用epoll_ctl 中的EPOLL_CTL_DEL , 同时close(sockfd)。
+                //有些系统会收到一个EPOLLRDHUP，当然检测这个是最好不过了。只可惜是有些系统，上面的方法最保险；如果能加上对EPOLLRDHUP的处理那就是万能的了。
+        //d)EPOLLERR      只有采取动作时，才能知道是否对方异常。即对方突然断掉，是不可能有此事件发生的。只有自己采取动作（当然自己此刻也不知道），read，write时，出EPOLLERR错，说明对方已经异常断开。
+        //e)EPOLLERR 是服务器这边出错（自己出错当然能检测到，对方出错你咋能知道啊）
+        //f)给已经关闭的socket写时，会发生EPOLLERR，也就是说，只有在采取行动（比如读一个已经关闭的socket，或者写一个已经关闭的socket）时候，才知道对方是否关闭了。
+                //这个时候，如果对方异常关闭了，则会出现EPOLLERR，出现Error把对方DEL掉，close就可以了。
+    }
+    else
+    {
+        //其他事件类型待处理
+        //.....
+    }
+    if(otherflag != 0){
+        ev.events |= otherflag;
+    }
+    ev.data.ptr = (void *)( (uintptr_t)c | c->instance);
+    if(epoll_ctl(m_epollhandle,eventtype,fd,&ev) == -1){
+        ngx_log_stderr(errno,"CSocekt::ngx_epoll_add_event()中epoll_ctl(%d,%d,%d,%u,%u)失败.",fd,readevent,writeevent,otherflag,eventtype);
+        //exit(2); //这是致命问题了，直接退，资源由系统释放吧，这里不刻意释放了，比较麻烦，后来发现不能直接退；
+        return -1;
+    }
+    return 1;
+}
+
+int CSocekt::ngx_epoll_process_events(int timer){
+    int events = epoll_wait(m_epollhandle,m_events,NGX_MAX_EVENTS,timer);
+    if(events == -1){
+        if(errno == EINTR){
+            //信号所致，直接返回，一般认为这不是毛病，但还是打印下日志记录一下，因为一般也不会人为给worker进程发送消息
+            ngx_log_error_core(NGX_LOG_INFO,errno,"CSocekt::ngx_epoll_process_events()中epoll_wait()失败!"); 
+            return 1;  //正常返回
+        }else{
+            //这被认为应该是有问题，记录日志
+            ngx_log_error_core(NGX_LOG_ALERT,errno,"CSocekt::ngx_epoll_process_events()中epoll_wait()失败!"); 
+            return 0;  //非正常返回 
+        }
+    }
+    if(events == 0){
+        if(timer != -1){
+            return 1;
+        }
+        ngx_log_error_core(NGX_LOG_ALERT,0,"CSocekt::ngx_epoll_process_events()中epoll_wait()没超时却没返回任何事件!"); 
+        return 0; //非正常返回 
+    }
+    lpngx_connection_t c;//指向连接池节点的指针
+    uintptr_t          instance;
+    uint32_t           revents;
+    for(int i = 0; i < events; ++ i){
+        c = (lpngx_connection_t)(m_events[i].data.ptr);           //ngx_epoll_add_event()给进去的，这里能取出来
+        instance = (uintptr_t) c & 1;                             //将地址的最后一位取出来，用instance变量标识, 见ngx_epoll_add_event，该值是当时随着连接池中的连接一起给进来的
+        c = (lpngx_connection_t) ((uintptr_t)c & (uintptr_t) ~1);
+        if(c->fd == -1){
+            ngx_log_error_core(NGX_LOG_DEBUG,0,"CSocekt::ngx_epoll_process_events()中遇到了fd=-1的过期事件:%p.",c); 
+            continue; //这种事件就不处理即可
+        }
+        if(c->instance != instance){
+            ngx_log_error_core(NGX_LOG_DEBUG,0,"CSocekt::ngx_epoll_process_events()中遇到了instance值改变的过期事件:%p.",c); 
+            continue; //这种事件就不处理即可
+        }
+        revents = m_events[i].events;
+        if(revents & (EPOLLERR | EPOLLHUP)){
+            revents |= EPOLLIN|EPOLLOUT;
+        }
+        if(revents & EPOLLIN){
+            (this->* (c->rhandler) )(c); 
+            //就相当于r->rhandler是指向函数的指针，那么把函数的指针解除引用
+            //就等于函数本身，调用对应的CSocekt的函数，然后c为对应的参数
+            //相当于接口类的设计
+        }
+        if(revents & EPOLLOUT){
+            ngx_log_stderr(errno,"111111111111111111111111111111.");
+        }
+    }
+    return 1;
+}

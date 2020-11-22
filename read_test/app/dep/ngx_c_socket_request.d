@@ -1,4 +1,4 @@
-/root/study_linux_c++/linux_c-_study/read_test/app/link_obj/ngx_c_socket.o: ngx_c_socket.cxx \
+/root/study_linux_c++/linux_c-_study/read_test/app/link_obj/ngx_c_socket_request.o: ngx_c_socket_request.cxx \
  /root/study_linux_c++/linux_c-_study/read_test/_include/ngx_c_conf.h \
  /root/study_linux_c++/linux_c-_study/read_test/_include/ngx_macro.h \
  /root/study_linux_c++/linux_c-_study/read_test/_include/ngx_global.h \

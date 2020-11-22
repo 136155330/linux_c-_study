@@ -11,6 +11,7 @@
 #include "ngx_c_conf.h"
 #include "blocking_queue.h"
 #include "ngx_global.h"
+#include "ngx_c_socket.h"
 #include <thread>
 #include <time.h>
 #include <pthread.h>
@@ -47,14 +48,14 @@ void ngx_master_process_cycle(){
     std::thread t1(print_log);
     std::thread t2(print_log);
     sigemptyset(&set);
-    int flag = 0;
-    while(true){
-        sleep(1);
-        if(flag < 10)
-        log_blocking_queue.put(ngx_log_error_blocking_queue_core_str(0,0,"haha--这是父进程，pid为%P",ngx_pid));
-        if(flag < 10)  flag ++;
-        if(flag == 10)break;
-    }
+    // int flag = 0;
+    // while(true){
+    //     sleep(1);
+    //     if(flag < 10)
+    //     log_blocking_queue.put(ngx_log_error_blocking_queue_core_str(0,0,"haha--这是父进程，pid为%P",ngx_pid));
+    //     if(flag < 10)  flag ++;
+    //     if(flag == 10)break;
+    // }
     while(true){
         sigsuspend(&set);
         sleep(1);
@@ -102,12 +103,12 @@ static void ngx_worker_process_cycle(int inum,const char *pprocname)
         //先sleep一下 以后扩充.......
         //printf("worker进程休息1秒");       
         //fflush(stdout); //刷新标准输出缓冲区，把输出缓冲区里的东西打印到标准输出设备上，则printf里的东西会立即输出；
-        sleep(1); //休息1秒       
+        //sleep(1); //休息1秒       
         //usleep(100000);
-        if(p_num < 10)
-        log_blocking_queue.put(ngx_log_error_blocking_queue_core_str(0,0,"good--这是子进程，编号为%d,pid为%P!",inum,ngx_pid));
-        if(p_num < 10)
-        p_num ++;
+        // if(p_num < 10)
+        // log_blocking_queue.put(ngx_log_error_blocking_queue_core_str(0,0,"good--这是子进程，编号为%d,pid为%P!",inum,ngx_pid));
+        // if(p_num < 10)
+        // p_num ++;
         //printf("1212");
         //if(inum == 1)
         //{
@@ -117,7 +118,7 @@ static void ngx_worker_process_cycle(int inum,const char *pprocname)
             //printf("我的测试哈inum=%d",inum++);
             //fflush(stdout);
         //}
-            
+        ngx_process_events_and_timers();
         //ngx_log_stderr(0,"good--这是子进程，pid为%P",ngx_pid); 
         //ngx_log_error_core(0,0,"good--这是子进程，编号为%d,pid为%P",inum,ngx_pid);
 
@@ -135,7 +136,7 @@ static void ngx_worker_process_init(int inum)
         ngx_log_error_core(NGX_LOG_ALERT,errno,"ngx_worker_process_init()中sigprocmask()失败!");
     }
 
-    
+    g_socket.ngx_epoll_init();
     //....将来再扩充代码
     //....
     return;

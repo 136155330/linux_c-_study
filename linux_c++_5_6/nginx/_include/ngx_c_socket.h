@@ -22,6 +22,7 @@ struct ngx_listening_s  //和监听端口有关的结构
 	int                       port;        //监听的端口号
 	int                       fd;          //套接字句柄socket
 	lpngx_connection_t        connection;  //连接池中的一个连接，注意这是个指针 
+	//lpngx_connection_t 是指针指向所谓的下述的ngx_connection_s结构
 };
 
 //以下三个结构是非常重要的三个结构，我们遵从官方nginx的写法；
@@ -31,7 +32,7 @@ struct ngx_connection_s
 	
 	int                       fd;             //套接字句柄socket
 	lpngx_listening_t         listening;      //如果这个链接被分配给了一个监听套接字，那么这个里边就指向监听套接字对应的那个lpngx_listening_t的内存首地址		
-
+	//感觉34行 让ngx_connection_s与ngx_listening_s互相指向
 	//------------------------------------	
 	unsigned                  instance:1;     //【位域】失效标志位：0：有效，1：失效【这个是官方nginx提供，到底有什么用，ngx_epoll_process_events()中详解】  
 	uint64_t                  iCurrsequence;  //我引入的一个序号，每次分配出去时+1，此法也有可能在一定程度上检测错包废包，具体怎么用，用到了再说
