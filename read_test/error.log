@@ -48,3 +48,137 @@
 2020/11/22 22:36:03 [alert] 5482: pid = 5484 exited on signal 9!
 2020/11/22 22:36:06 [notice] 5482: signal 17 (SIGCHLD) received from 5483
 2020/11/22 22:36:06 [alert] 5482: pid = 5483 exited on signal 9!
+2020/11/26 20:03:04 [info] 15718: 监听80端口成功!
+2020/11/26 20:03:04 [info] 15718: 监听443端口成功!
+2020/11/26 20:03:42 [notice] 15719: signal 17 (SIGCHLD) received from 15723
+2020/11/26 20:03:42 [alert] 15719: pid = 15723 exited on signal 9!
+2020/11/26 20:03:44 [notice] 15719: signal 17 (SIGCHLD) received from 15722
+2020/11/26 20:03:44 [alert] 15719: pid = 15722 exited on signal 9!
+2020/11/26 20:03:45 [notice] 15719: signal 17 (SIGCHLD) received from 15721
+2020/11/26 20:03:45 [alert] 15719: pid = 15721 exited on signal 9!
+2020/11/26 20:03:47 [notice] 15719: signal 17 (SIGCHLD) received from 15720
+2020/11/26 20:03:47 [alert] 15719: pid = 15720 exited on signal 9!
+2020/11/26 22:13:57 [info] 17870: 监听80端口成功!
+2020/11/26 22:13:57 [info] 17870: 监听443端口成功!
+2020/11/26 22:14:51 [notice] 17871: signal 17 (SIGCHLD) received from 17875
+2020/11/26 22:14:51 [alert] 17871: pid = 17875 exited on signal 9!
+2020/11/26 22:14:53 [notice] 17871: signal 17 (SIGCHLD) received from 17874
+2020/11/26 22:14:53 [alert] 17871: pid = 17874 exited on signal 9!
+2020/11/26 22:14:55 [notice] 17871: signal 17 (SIGCHLD) received from 17873
+2020/11/26 22:14:55 [alert] 17871: pid = 17873 exited on signal 9!
+2020/11/26 22:14:56 [notice] 17871: signal 17 (SIGCHLD) received from 17872
+2020/11/26 22:14:56 [alert] 17871: pid = 17872 exited on signal 9!
+2020/11/26 22:16:58 [info] 17951: 监听80端口成功!
+2020/11/26 22:16:58 [info] 17951: 监听443端口成功!
+2020/11/26 22:26:21 [notice] 17952: signal 17 (SIGCHLD) received from 17956
+2020/11/26 22:26:21 [alert] 17952: pid = 17956 exited on signal 9!
+2020/11/26 22:26:22 [notice] 17952: signal 17 (SIGCHLD) received from 17955
+2020/11/26 22:26:22 [alert] 17952: pid = 17955 exited on signal 9!
+2020/11/26 22:26:23 [notice] 17952: signal 17 (SIGCHLD) received from 17954
+2020/11/26 22:26:23 [alert] 17952: pid = 17954 exited on signal 9!
+2020/11/26 22:26:25 [notice] 17952: signal 17 (SIGCHLD) received from 17953
+2020/11/26 22:26:25 [alert] 17952: pid = 17953 exited on signal 9!
+2020/11/26 22:26:39 [info] 18469: 监听80端口成功!
+2020/11/26 22:26:39 [info] 18469: 监听443端口成功!
+2020/11/26 22:26:49 [info] 18471: 来了一个监听事件!
+2020/11/26 22:34:04 [info] 18471: 来了一个监听事件!
+2020/11/26 22:34:27 [info] 18471: 来了一个监听事件!
+2020/11/26 22:35:39 [info] 18471: 来了一个监听事件!
+2020/11/26 22:37:01 [info] 18471: 来了一个监听事件!
+2020/11/26 22:40:24 [notice] 18470: signal 17 (SIGCHLD) received from 18474
+2020/11/26 22:40:24 [alert] 18470: pid = 18474 exited on signal 9!
+2020/11/26 22:40:25 [notice] 18470: signal 17 (SIGCHLD) received from 18473
+2020/11/26 22:40:25 [alert] 18470: pid = 18473 exited on signal 9!
+2020/11/26 22:40:26 [notice] 18470: signal 17 (SIGCHLD) received from 18472
+2020/11/26 22:40:26 [alert] 18470: pid = 18472 exited on signal 9!
+2020/11/26 22:40:27 [notice] 18470: signal 17 (SIGCHLD) received from 18471
+2020/11/26 22:40:27 [alert] 18470: pid = 18471 exited on signal 9!
+2020/11/26 22:41:20 [info] 19380: 监听80端口成功!
+2020/11/26 22:41:20 [info] 19380: 监听443端口成功!
+2020/11/26 22:41:26 [info] 19382: 来了一个监听事件!
+2020/11/26 22:41:29 [info] 19382: ngx_wait_request_handler 运行
+2020/11/26 22:41:56 [info] 19382: ngx_wait_request_handler 运行
+2020/11/26 22:43:03 [notice] 19381: signal 17 (SIGCHLD) received from 19385
+2020/11/26 22:43:03 [alert] 19381: pid = 19385 exited on signal 9!
+2020/11/26 22:43:04 [notice] 19381: signal 17 (SIGCHLD) received from 19384
+2020/11/26 22:43:04 [alert] 19381: pid = 19384 exited on signal 9!
+2020/11/26 22:43:06 [notice] 19381: signal 17 (SIGCHLD) received from 19383
+2020/11/26 22:43:06 [alert] 19381: pid = 19383 exited on signal 9!
+2020/11/26 22:43:07 [notice] 19381: signal 17 (SIGCHLD) received from 19382
+2020/11/26 22:43:07 [alert] 19381: pid = 19382 exited on signal 9!
+2020/11/27 09:55:41 [info] 20515: 监听80端口成功!
+2020/11/27 09:55:41 [info] 20515: 监听443端口成功!
+2020/11/27 09:55:52 [info] 20517: 来了一个监听事件!
+2020/11/27 09:55:53 [info] 20517: ngx_wait_request_handler 运行
+2020/11/27 09:55:53 [info] 20517: c->curstat = _PKG_HD_INIT
+2020/11/27 09:55:55 [info] 20517: ngx_wait_request_handler 运行
+2020/11/27 09:56:24 [notice] 20516: signal 17 (SIGCHLD) received from 20520
+2020/11/27 09:56:24 [alert] 20516: pid = 20520 exited on signal 9!
+2020/11/27 09:56:27 [notice] 20516: signal 17 (SIGCHLD) received from 20519
+2020/11/27 09:56:27 [alert] 20516: pid = 20519 exited on signal 9!
+2020/11/27 09:56:28 [notice] 20516: signal 17 (SIGCHLD) received from 20518
+2020/11/27 09:56:28 [alert] 20516: pid = 20518 exited on signal 9!
+2020/11/27 09:56:30 [notice] 20516: signal 17 (SIGCHLD) received from 20517
+2020/11/27 09:56:30 [alert] 20516: pid = 20517 exited on signal 9!
+2020/11/27 10:02:31 [info] 20737: 监听80端口成功!
+2020/11/27 10:02:31 [info] 20737: 监听443端口成功!
+2020/11/27 10:02:37 [info] 20739: 来了一个监听事件!
+2020/11/27 10:02:39 [info] 20739: ngx_wait_request_handler 运行
+2020/11/27 10:02:39 [info] 20739: c->curstat = _PKG_HD_INIT
+2020/11/27 10:02:39 [info] 20739: ngx_wait_request_handler 运行
+2020/11/27 15:24:20 [notice] 20738: signal 17 (SIGCHLD) received from 20742
+2020/11/27 15:24:20 [alert] 20738: pid = 20742 exited on signal 9!
+2020/11/27 15:24:21 [notice] 20738: signal 17 (SIGCHLD) received from 20741
+2020/11/27 15:24:21 [alert] 20738: pid = 20741 exited on signal 9!
+2020/11/27 15:24:23 [notice] 20738: signal 17 (SIGCHLD) received from 20740
+2020/11/27 15:24:23 [alert] 20738: pid = 20740 exited on signal 9!
+2020/11/27 15:24:25 [notice] 20738: signal 17 (SIGCHLD) received from 20739
+2020/11/27 15:24:25 [alert] 20738: pid = 20739 exited on signal 9!
+2020/11/27 15:24:34 [info] 21420: 监听80端口成功!
+2020/11/27 15:24:34 [info] 21420: 监听443端口成功!
+2020/11/27 15:24:43 [info] 21422: 来了一个监听事件!
+2020/11/27 15:24:44 [info] 21422: ngx_wait_request_handler 运行
+2020/11/27 15:24:44 [info] 21422: c->curstat = _PKG_HD_INIT
+2020/11/27 15:24:44 [info] 21422: 包头没有收齐
+2020/11/27 15:24:44 [info] 21422: ngx_wait_request_handler 运行
+2020/11/27 15:26:20 [notice] 21421: signal 17 (SIGCHLD) received from 21425
+2020/11/27 15:26:20 [alert] 21421: pid = 21425 exited on signal 9!
+2020/11/27 15:26:21 [notice] 21421: signal 17 (SIGCHLD) received from 21423
+2020/11/27 15:26:21 [alert] 21421: pid = 21423 exited on signal 9!
+2020/11/27 15:26:23 [notice] 21421: signal 17 (SIGCHLD) received from 21424
+2020/11/27 15:26:23 [alert] 21421: pid = 21424 exited on signal 9!
+2020/11/27 15:26:24 [notice] 21421: signal 17 (SIGCHLD) received from 21422
+2020/11/27 15:26:24 [alert] 21421: pid = 21422 exited on signal 9!
+2020/11/27 15:26:41 [info] 21589: 监听80端口成功!
+2020/11/27 15:26:41 [info] 21589: 监听443端口成功!
+2020/11/27 15:26:48 [info] 21591: 来了一个监听事件!
+2020/11/27 15:26:50 [info] 21591: ngx_wait_request_handler 运行
+2020/11/27 15:26:50 [info] 21591: c->curstat = _PKG_HD_INIT
+2020/11/27 15:26:50 [info] 21591: 包头没有收齐
+2020/11/27 15:26:50 [info] 21591: ngx_wait_request_handler 运行
+2020/11/27 15:26:50 [info] 21591: reco <= 0
+2020/11/27 16:18:43 [notice] 21590: signal 17 (SIGCHLD) received from 21594
+2020/11/27 16:18:43 [alert] 21590: pid = 21594 exited on signal 9!
+2020/11/27 16:18:44 [notice] 21590: signal 17 (SIGCHLD) received from 21593
+2020/11/27 16:18:44 [alert] 21590: pid = 21593 exited on signal 9!
+2020/11/27 16:18:45 [notice] 21590: signal 17 (SIGCHLD) received from 21592
+2020/11/27 16:18:45 [alert] 21590: pid = 21592 exited on signal 9!
+2020/11/27 16:18:47 [notice] 21590: signal 17 (SIGCHLD) received from 21591
+2020/11/27 16:18:47 [alert] 21590: pid = 21591 exited on signal 9!
+2020/11/27 16:19:22 [info] 22052: 监听80端口成功!
+2020/11/27 16:19:22 [info] 22052: 监听443端口成功!
+2020/11/27 16:19:27 [info] 22054: 来了一个监听事件!
+2020/11/27 16:19:28 [info] 22054: ngx_wait_request_handler 运行
+2020/11/27 16:19:28 [info] 22054: c->curstat = _PKG_HD_INIT
+2020/11/27 16:19:28 [info] 22054: ngx_wait_request_handler_proc_p1 运行
+2020/11/27 16:19:28 [info] 22054: ngx_wait_request_handler 运行
+2020/11/27 16:19:28 [info] 22054: ngx_wait_request_handler_proc_plast 运行
+2020/11/27 16:19:28 [info] 22054: 非常好，收到了一个完整的数据包【包头+包体】！
+2020/11/27 16:19:40 [info] 22054: ngx_wait_request_handler 运行
+2020/11/27 16:19:40 [info] 22054: c->curstat = _PKG_HD_INIT
+2020/11/27 16:19:40 [info] 22054: ngx_wait_request_handler_proc_p1 运行
+2020/11/27 16:19:40 [info] 22054: ngx_wait_request_handler 运行
+2020/11/27 16:19:40 [info] 22054: ngx_wait_request_handler_proc_plast 运行
+2020/11/27 16:19:40 [info] 22054: 非常好，收到了一个完整的数据包【包头+包体】！
+2020/11/27 16:19:49 [info] 22054: ngx_wait_request_handler 运行
+2020/11/27 16:19:49 [info] 22054: reco <= 0

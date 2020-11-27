@@ -25,6 +25,7 @@
 
 
 void CSocekt::ngx_event_accept(lpngx_connection_t oldc){
+    ngx_log_error_core(NGX_LOG_INFO,0,"来了一个监听事件!");
     struct sockaddr mysockaddr;
     socklen_t socklen;
     int err;
@@ -84,7 +85,7 @@ void CSocekt::ngx_event_accept(lpngx_connection_t oldc){
         newc->rhandler = &CSocekt::ngx_wait_request_handler;
          if(ngx_epoll_add_event(s,                 //socket句柄
                                 1,0,              //读，写 ,这里读为1，表示客户端应该主动给我服务器发送消息，我服务器需要首先收到客户端的消息；
-                                EPOLLET,          //其他补充标记【EPOLLET(高速模式，边缘触发ET)】
+                                0,          //其他补充标记【EPOLLET(高速模式，边缘触发ET)】
                                 EPOLL_CTL_ADD,    //事件类型【增加，还有删除/修改】                                    
                                 newc              //连接池中的连接
                                 ) == -1)

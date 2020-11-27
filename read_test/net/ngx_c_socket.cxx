@@ -22,6 +22,7 @@
 #include "ngx_global.h"
 #include "ngx_c_func.h"
 #include "ngx_c_socket.h"
+#include "ngx_c_memory.h"
 
 //构造函数
 CSocekt::CSocekt()
@@ -34,6 +35,8 @@ CSocekt::CSocekt()
     m_pconnections = NULL; //连接池为空
     m_pfree_connections = NULL; //连接池中的空闲连接
 
+    m_iLenPkgHeader = sizeof(COMM_PKG_HEADER); //包头大小
+    m_iLenMsgHeader = sizeof(STRUC_MSG_HEADER); //信息头大小
     return;	
 }
 
@@ -54,7 +57,17 @@ CSocekt::~CSocekt()
     if(m_pconnections != NULL){
         delete[] m_pconnections;
     }
+    clearMsgRecvQueue();
     return;
+}
+void CSocekt::clearMsgRecvQueue(){
+    char * sTmpMempoint;
+    CMemory *p_memory = CMemory::GetInstance();
+    while(!m_MsgRecvQueue.empty()){
+        sTmpMempoint = m_MsgRecvQueue.front();
+        m_MsgRecvQueue.pop_front();
+        p_memory->FreeMemory(sTmpMempoint);
+    }
 }
 bool CSocekt::Initialize()
 {
