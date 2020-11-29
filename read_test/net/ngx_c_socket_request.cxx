@@ -23,6 +23,7 @@
 #include "ngx_c_func.h"
 #include "ngx_c_socket.h"
 #include "ngx_c_memory.h"
+#include "ngx_c_lockmutex.h"
 
 void CSocekt::ngx_wait_request_handler(lpngx_connection_t c){
     ngx_log_error_core(NGX_LOG_INFO,0,"ngx_wait_request_handler 运行");
@@ -165,8 +166,10 @@ void CSocekt::ngx_wait_request_handler_proc_p1(lpngx_connection_t c)
 }
 void CSocekt::ngx_wait_request_handler_proc_plast(lpngx_connection_t c)
 {
+    int irmqc = 0;
     ngx_log_error_core(NGX_LOG_INFO,0,"ngx_wait_request_handler_proc_plast 运行");
-    inMsgRecvQueue(c->pnewMemPointer);
+    inMsgRecvQueue(c->pnewMemPointer, irmqc);
+    g_threadpool.Call(irmqc);
     c->ifnewrecvMem = false;
     c->pnewMemPointer = NULL;
     c->curStat = _PKG_HD_INIT;
@@ -176,36 +179,20 @@ void CSocekt::ngx_wait_request_handler_proc_plast(lpngx_connection_t c)
 }
 
 
-void CSocekt::inMsgRecvQueue(char *buf){
+void CSocekt::inMsgRecvQueue(char *buf, int &irmqc){
+    CLock lock(&m_recvMessageQueueMutex);
     m_MsgRecvQueue.push_back(buf);
-     tmpoutMsgRecvQueue();   //.....临时，后续会取消这行代码
-
+    ++m_iRecvMsgQueueCount;
+    irmqc = m_iRecvMsgQueueCount;
     //为了测试方便，因为本函数意味着收到了一个完整的数据包，所以这里打印一个信息
-     ngx_log_error_core(NGX_LOG_INFO,0,"非常好，收到了一个完整的数据包【包头+包体】！");
-
+    ngx_log_error_core(NGX_LOG_INFO,0,"非常好，收到了一个完整的数据包【包头+包体】！");
+    return ;
 }
-
-void CSocekt::tmpoutMsgRecvQueue()
-{
-    //日后可能引入outMsgRecvQueue()，这个函数可能需要临界......
-    if(m_MsgRecvQueue.empty())  //没有消息直接退出
-    {
-        return;
-    }
-    int size = m_MsgRecvQueue.size();
-    if(size < 1000) //消息不超过1000条就不处理先
-    {
-        return; 
-    }
-    //消息达到1000条
-    CMemory *p_memory = CMemory::GetInstance();		
-    int cha = size - 500;
-    for(int i = 0; i < cha; ++i)
-    {
-        //一次干掉一堆
-        char *sTmpMsgBuf = m_MsgRecvQueue.front();//返回第一个元素但不检查元素存在与否
-        m_MsgRecvQueue.pop_front();               //移除第一个元素但不返回	
-        p_memory->FreeMemory(sTmpMsgBuf);         //先释放掉把；
-    }        
-    return;
+char* CSocekt::outMsgRecvQueue(){
+    CLock lock(&m_recvMessageQueueMutex);
+    if(m_MsgRecvQueue.empty())  return NULL;
+    char *result = m_MsgRecvQueue.front();
+    m_MsgRecvQueue.pop_front();
+    --m_iRecvMsgQueueCount;
+    return result;
 }

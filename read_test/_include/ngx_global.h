@@ -3,6 +3,7 @@
 #include "blocking_queue.h"
 #include <signal.h>
 #include "ngx_c_socket.h"
+#include "ngx_c_threadpool.h"
 //和运行日志相关 
 typedef struct
 {
@@ -16,6 +17,8 @@ extern char * gp_envmem;
 extern int g_environlen;
 extern int g_daemonized;
 extern CSocekt     g_socket; 
+extern CThreadPool   g_threadpool;
+
 extern pid_t       ngx_pid;
 extern pid_t       ngx_parent;
 extern ngx_log_t   ngx_log;

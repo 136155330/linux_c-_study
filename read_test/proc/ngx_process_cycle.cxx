@@ -12,6 +12,7 @@
 #include "blocking_queue.h"
 #include "ngx_global.h"
 #include "ngx_c_socket.h"
+#include "ngx_c_threadpool.h"
 #include <thread>
 #include <time.h>
 #include <pthread.h>
@@ -92,8 +93,6 @@ static void ngx_worker_process_cycle(int inum,const char *pprocname)
     //重新为子进程设置进程名，不要与父进程重复------
     ngx_worker_process_init(inum);
     ngx_setproctitle(pprocname); //设置标题   
-    std::thread t1(print_log);
-    std::thread t2(print_log);
     //暂时先放个死循环，我们在这个循环里一直不出来
     //setvbuf(stdout,NULL,_IONBF,0); //这个函数. 直接将printf缓冲区禁止， printf就直接输出了。
     int p_num = 0;
@@ -123,6 +122,7 @@ static void ngx_worker_process_cycle(int inum,const char *pprocname)
         //ngx_log_error_core(0,0,"good--这是子进程，编号为%d,pid为%P",inum,ngx_pid);
 
     } //end for(;;)
+    g_threadpool.StopAll();
     return;
 }
 //描述：子进程创建时调用本函数进行一些初始化工作
@@ -135,7 +135,15 @@ static void ngx_worker_process_init(int inum)
     {
         ngx_log_error_core(NGX_LOG_ALERT,errno,"ngx_worker_process_init()中sigprocmask()失败!");
     }
-
+    CConfig::CC_Ptr p_config = CConfig::get_instance();
+    int tmpthreadnums = p_config->GetInt("ProcMsgRecvWorkThreadCount");
+    if(tmpthreadnums == -1){
+        tmpthreadnums = 4;
+    }
+    if(g_threadpool.Create(tmpthreadnums) == false){
+        exit(-2);
+    }
+    sleep(1);
     g_socket.ngx_epoll_init();
     //....将来再扩充代码
     //....

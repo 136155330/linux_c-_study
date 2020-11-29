@@ -66,6 +66,7 @@ public:
 	int  ngx_epoll_add_event(int fd,int readevent,int writeevent,uint32_t otherflag,uint32_t eventtype,lpngx_connection_t c);     
 	                                                                   //epoll增加事件
 	int  ngx_epoll_process_events(int timer);
+	char* outMsgRecvQueue();
 private:
     void ReadConf();                                                   //专门用于读各种配置项	
 	bool ngx_open_listening_sockets();                                 //监听必须的端口【支持多个端口】
@@ -81,8 +82,8 @@ private:
 	ssize_t recvproc(lpngx_connection_t c,char *buff,ssize_t buflen);  //接收从客户端来的数据专用函数
 	void ngx_wait_request_handler_proc_p1(lpngx_connection_t c);       //包头收完整后的处理，我们称为包处理阶段1：写成函数，方便复用	                                                                   
 	void ngx_wait_request_handler_proc_plast(lpngx_connection_t c);    //收到一个完整包后的处理，放到一个函数中，方便调用
-	void inMsgRecvQueue(char *buf);                                    //收到一个完整消息后，入消息队列
-	void tmpoutMsgRecvQueue(); //临时清除对列中消息函数，测试用，将来会删除该函数
+	void inMsgRecvQueue(char *buf, int &irmqc);                                    //收到一个完整消息后，入消息队列
+	//void tmpoutMsgRecvQueue(); //临时清除对列中消息函数，测试用，将来会删除该函数
 	void clearMsgRecvQueue();   
 
 	//获取对端信息相关                                              
@@ -115,5 +116,11 @@ private:
 	size_t                         m_iLenPkgHeader;                    //sizeof(COMM_PKG_HEADER);		
 	size_t                         m_iLenMsgHeader;
 	std::list<char *>	m_MsgRecvQueue;
+
+	int                            m_iRecvMsgQueueCount;               //收消息队列大小
+
+	//多线程相关
+	pthread_mutex_t                m_recvMessageQueueMutex;            //收消息队列互斥量 
+
 };
 #endif

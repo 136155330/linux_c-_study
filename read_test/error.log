@@ -182,3 +182,102 @@
 2020/11/27 16:19:40 [info] 22054: 非常好，收到了一个完整的数据包【包头+包体】！
 2020/11/27 16:19:49 [info] 22054: ngx_wait_request_handler 运行
 2020/11/27 16:19:49 [info] 22054: reco <= 0
+2020/11/29 22:37:12 [info] 29629: 监听80端口成功!
+2020/11/29 22:37:12 [info] 29629: 监听443端口成功!
+2020/11/29 22:37:24 [info] 29631: 来了一个监听事件!
+2020/11/29 22:37:26 [info] 29631: ngx_wait_request_handler 运行
+2020/11/29 22:37:26 [info] 29631: c->curstat = _PKG_HD_INIT
+2020/11/29 22:37:26 [info] 29631: ngx_wait_request_handler_proc_p1 运行
+2020/11/29 22:37:26 [info] 29631: ngx_wait_request_handler 运行
+2020/11/29 22:37:26 [info] 29631: ngx_wait_request_handler_proc_plast 运行
+2020/11/29 22:37:26 [info] 29631: 非常好，收到了一个完整的数据包【包头+包体】！
+2020/11/29 22:37:29 [info] 29631: ngx_wait_request_handler 运行
+2020/11/29 22:37:29 [info] 29631: c->curstat = _PKG_HD_INIT
+2020/11/29 22:37:29 [info] 29631: ngx_wait_request_handler_proc_p1 运行
+2020/11/29 22:37:29 [info] 29631: ngx_wait_request_handler 运行
+2020/11/29 22:37:29 [info] 29631: ngx_wait_request_handler_proc_plast 运行
+2020/11/29 22:37:29 [info] 29631: 非常好，收到了一个完整的数据包【包头+包体】！
+2020/11/29 22:37:47 [info] 29631: ngx_wait_request_handler 运行
+2020/11/29 22:37:47 [info] 29631: c->curstat = _PKG_HD_INIT
+2020/11/29 22:37:47 [info] 29631: ngx_wait_request_handler_proc_p1 运行
+2020/11/29 22:37:47 [info] 29631: ngx_wait_request_handler 运行
+2020/11/29 22:37:47 [info] 29631: ngx_wait_request_handler_proc_plast 运行
+2020/11/29 22:37:47 [info] 29631: 非常好，收到了一个完整的数据包【包头+包体】！
+2020/11/29 22:37:47 [info] 29631: ngx_wait_request_handler 运行
+2020/11/29 22:37:47 [info] 29631: c->curstat = _PKG_HD_INIT
+2020/11/29 22:37:47 [info] 29631: ngx_wait_request_handler_proc_p1 运行
+2020/11/29 22:37:47 [info] 29631: ngx_wait_request_handler 运行
+2020/11/29 22:37:47 [info] 29631: ngx_wait_request_handler_proc_plast 运行
+2020/11/29 22:37:47 [info] 29631: 非常好，收到了一个完整的数据包【包头+包体】！
+2020/11/29 22:38:25 [notice] 29630: signal 17 (SIGCHLD) received from 29634
+2020/11/29 22:38:25 [alert] 29630: pid = 29634 exited on signal 9!
+2020/11/29 22:38:26 [notice] 29630: signal 17 (SIGCHLD) received from 29633
+2020/11/29 22:38:26 [alert] 29630: pid = 29633 exited on signal 9!
+2020/11/29 22:38:27 [notice] 29630: signal 17 (SIGCHLD) received from 29632
+2020/11/29 22:38:27 [alert] 29630: pid = 29632 exited on signal 9!
+2020/11/29 22:38:28 [notice] 29630: signal 17 (SIGCHLD) received from 29631
+2020/11/29 22:38:28 [alert] 29630: pid = 29631 exited on signal 9!
+2020/11/29 22:41:11 [info] 29864: 监听80端口成功!
+2020/11/29 22:41:11 [info] 29864: 监听443端口成功!
+2020/11/29 22:41:17 [info] 29866: 来了一个监听事件!
+2020/11/29 22:41:17 [info] 29867: 来了一个监听事件!
+2020/11/29 22:41:17 [info] 29868: 来了一个监听事件!
+2020/11/29 22:41:17 [info] 29869: 来了一个监听事件!
+2020/11/29 22:41:17 [info] 29866: ngx_wait_request_handler 运行
+2020/11/29 22:41:17 [info] 29866: c->curstat = _PKG_HD_INIT
+2020/11/29 22:41:17 [info] 29866: ngx_wait_request_handler_proc_p1 运行
+2020/11/29 22:41:17 [info] 29866: ngx_wait_request_handler 运行
+2020/11/29 22:41:17 [info] 29866: ngx_wait_request_handler_proc_plast 运行
+2020/11/29 22:41:17 [info] 29866: 非常好，收到了一个完整的数据包【包头+包体】！
+2020/11/29 22:41:17 [notice] 29865: signal 17 (SIGCHLD) received from 29866
+2020/11/29 22:41:17 [alert] 29865: pid = 29866 exited on signal 11!
+2020/11/29 22:41:42 [info] 29867: 来了一个监听事件!
+2020/11/29 22:41:44 [info] 29867: ngx_wait_request_handler 运行
+2020/11/29 22:41:44 [info] 29867: c->curstat = _PKG_HD_INIT
+2020/11/29 22:41:44 [info] 29867: ngx_wait_request_handler_proc_p1 运行
+2020/11/29 22:41:44 [info] 29867: ngx_wait_request_handler 运行
+2020/11/29 22:41:44 [info] 29867: ngx_wait_request_handler_proc_plast 运行
+2020/11/29 22:41:44 [info] 29867: 非常好，收到了一个完整的数据包【包头+包体】！
+2020/11/29 22:41:44 [notice] 29865: signal 17 (SIGCHLD) received from 29867
+2020/11/29 22:41:44 [alert] 29865: pid = 29867 exited on signal 11!
+2020/11/29 22:42:21 [notice] 29865: signal 17 (SIGCHLD) received from 29869
+2020/11/29 22:42:21 [alert] 29865: pid = 29869 exited on signal 9!
+2020/11/29 22:42:24 [notice] 29865: signal 17 (SIGCHLD) received from 29868
+2020/11/29 22:42:24 [alert] 29865: pid = 29868 exited on signal 9!
+2020/11/29 22:44:03 [info] 30112: 监听80端口成功!
+2020/11/29 22:44:03 [info] 30112: 监听443端口成功!
+2020/11/29 22:44:14 [info] 30114: 来了一个监听事件!
+2020/11/29 22:44:17 [info] 30114: ngx_wait_request_handler 运行
+2020/11/29 22:44:17 [info] 30114: c->curstat = _PKG_HD_INIT
+2020/11/29 22:44:17 [info] 30114: ngx_wait_request_handler_proc_p1 运行
+2020/11/29 22:44:17 [info] 30114: ngx_wait_request_handler 运行
+2020/11/29 22:44:17 [info] 30114: ngx_wait_request_handler_proc_plast 运行
+2020/11/29 22:44:17 [info] 30114: 非常好，收到了一个完整的数据包【包头+包体】！
+2020/11/29 22:44:17 [info] 30114: 执行开始---begin,tid=1194071808!
+2020/11/29 22:44:22 [info] 30114: 执行结束---end,tid=1194071808!
+2020/11/29 22:44:24 [info] 30114: ngx_wait_request_handler 运行
+2020/11/29 22:44:24 [info] 30114: c->curstat = _PKG_HD_INIT
+2020/11/29 22:44:24 [info] 30114: ngx_wait_request_handler_proc_p1 运行
+2020/11/29 22:44:24 [info] 30114: ngx_wait_request_handler 运行
+2020/11/29 22:44:24 [info] 30114: ngx_wait_request_handler_proc_plast 运行
+2020/11/29 22:44:24 [info] 30114: 非常好，收到了一个完整的数据包【包头+包体】！
+2020/11/29 22:44:24 [info] 30114: 执行开始---begin,tid=1185679104!
+2020/11/29 22:44:25 [info] 30114: ngx_wait_request_handler 运行
+2020/11/29 22:44:25 [info] 30114: c->curstat = _PKG_HD_INIT
+2020/11/29 22:44:25 [info] 30114: ngx_wait_request_handler_proc_p1 运行
+2020/11/29 22:44:25 [info] 30114: ngx_wait_request_handler 运行
+2020/11/29 22:44:25 [info] 30114: ngx_wait_request_handler_proc_plast 运行
+2020/11/29 22:44:25 [info] 30114: 非常好，收到了一个完整的数据包【包头+包体】！
+2020/11/29 22:44:25 [info] 30114: 执行开始---begin,tid=1168893696!
+2020/11/29 22:44:26 [info] 30114: ngx_wait_request_handler 运行
+2020/11/29 22:44:26 [info] 30114: c->curstat = _PKG_HD_INIT
+2020/11/29 22:44:26 [info] 30114: ngx_wait_request_handler_proc_p1 运行
+2020/11/29 22:44:26 [info] 30114: ngx_wait_request_handler 运行
+2020/11/29 22:44:26 [info] 30114: ngx_wait_request_handler_proc_plast 运行
+2020/11/29 22:44:26 [info] 30114: 非常好，收到了一个完整的数据包【包头+包体】！
+2020/11/29 22:44:26 [info] 30114: 执行开始---begin,tid=1177286400!
+2020/11/29 22:44:29 [info] 30114: 执行结束---end,tid=1185679104!
+2020/11/29 22:44:30 [info] 30114: 执行结束---end,tid=1168893696!
+2020/11/29 22:44:31 [info] 30114: 执行结束---end,tid=1177286400!
+2020/11/29 22:44:37 [info] 30114: ngx_wait_request_handler 运行
+2020/11/29 22:44:37 [info] 30114: reco <= 0

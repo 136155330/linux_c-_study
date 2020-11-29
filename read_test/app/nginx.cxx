@@ -13,6 +13,9 @@
 #include "ngx_c_func.h"
 #include "ngx_c_socket.h"
 #include "blocking_queue.h"
+#include "ngx_c_threadpool.h"
+
+
 std::mutex CConfig::Config_mutex;
 CConfig::CC_Ptr CConfig::instance_ptr = nullptr;
 char ** g_os_argv = nullptr;
@@ -25,6 +28,8 @@ int ngx_process;
 sig_atomic_t  ngx_reap;
 int g_daemonized=0;
 CSocekt g_socket;
+CThreadPool g_threadpool;
+
 void print_log(){
     while(true){
     std::string word = log_blocking_queue.take();
