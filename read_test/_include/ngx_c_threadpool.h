@@ -4,16 +4,19 @@
 #include <vector>
 #include <pthread.h>
 #include <atomic>
-
+#include <list>
 class CThreadPool{
 public:
     CThreadPool();
     ~CThreadPool();
+public:
     bool Create(int threadNum);
     void StopAll();
-    void Call(int irmqc);
+    void inMsgRecvQueueAndSignal(char *buf);
+    void Call();
 private:
     static void * ThreadFunc(void *threadData);
+    void clearMsgRecvQueue();
     struct ThreadItem{
         pthread_t _Handle;
         CThreadPool *_pThis;
@@ -33,7 +36,8 @@ private:
     time_t                     m_iLastEmgTime;      //上次发生线程不够用【紧急事件】的时间,防止日志报的太频繁
     //time_t                     m_iPrintInfoTime;    //打印信息的一个间隔时间，我准备10秒打印出一些信息供参考和调试
     //time_t                     m_iCurrTime;         //当前时间
-
+    std::list<char *> m_MsgRecvQueue;
+    int m_iRecvMsgQueueCount;
     std::vector<ThreadItem *>  m_threadVector;   //线程 容器，容器里就是各个线程了  
 };
 

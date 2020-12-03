@@ -14,7 +14,7 @@
 #include "ngx_c_socket.h"
 #include "blocking_queue.h"
 #include "ngx_c_threadpool.h"
-
+#include "ngx_c_slogic.h"
 
 std::mutex CConfig::Config_mutex;
 CConfig::CC_Ptr CConfig::instance_ptr = nullptr;
@@ -25,9 +25,10 @@ blocking_queue<std::string> log_blocking_queue;
 pid_t ngx_pid;
 pid_t ngx_parent;
 int ngx_process;
+int g_stopEvent;
 sig_atomic_t  ngx_reap;
 int g_daemonized=0;
-CSocekt g_socket;
+CLogicSocket g_socket;
 CThreadPool g_threadpool;
 
 void print_log(){

@@ -123,6 +123,7 @@ static void ngx_worker_process_cycle(int inum,const char *pprocname)
 
     } //end for(;;)
     g_threadpool.StopAll();
+    g_socket.Shutdown_subproc();
     return;
 }
 //描述：子进程创建时调用本函数进行一些初始化工作
@@ -144,6 +145,9 @@ static void ngx_worker_process_init(int inum)
         exit(-2);
     }
     sleep(1);
+    if(g_socket.Initialize_subproc() == false){
+        exit(-2);
+    }
     g_socket.ngx_epoll_init();
     //....将来再扩充代码
     //....

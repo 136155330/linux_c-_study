@@ -281,3 +281,89 @@
 2020/11/29 22:44:31 [info] 30114: 执行结束---end,tid=1177286400!
 2020/11/29 22:44:37 [info] 30114: ngx_wait_request_handler 运行
 2020/11/29 22:44:37 [info] 30114: reco <= 0
+2020/12/01 21:57:11 [notice] 30117: signal 15 (SIGTERM) received from 5886
+2020/12/01 21:57:11 [info] 30117: CSocekt::ngx_epoll_process_events()中epoll_wait()失败! (4: Interrupted system call) 
+2020/12/01 21:57:13 [notice] 30116: signal 15 (SIGTERM) received from 5886
+2020/12/01 21:57:13 [info] 30116: CSocekt::ngx_epoll_process_events()中epoll_wait()失败! (4: Interrupted system call) 
+2020/12/01 21:57:14 [notice] 30115: signal 15 (SIGTERM) received from 5886
+2020/12/01 21:57:14 [info] 30115: CSocekt::ngx_epoll_process_events()中epoll_wait()失败! (4: Interrupted system call) 
+2020/12/01 21:57:16 [notice] 30114: signal 15 (SIGTERM) received from 5886
+2020/12/01 21:57:16 [info] 30114: CSocekt::ngx_epoll_process_events()中epoll_wait()失败! (4: Interrupted system call) 
+2020/12/01 21:57:17 [notice] 30113: signal 15 (SIGTERM) received from 5886
+2020/12/01 21:58:03 [info] 30114: 来了一个监听事件!
+2020/12/01 21:58:05 [info] 30114: ngx_wait_request_handler 运行
+2020/12/01 21:58:05 [info] 30114: c->curstat = _PKG_HD_INIT
+2020/12/01 21:58:05 [info] 30114: ngx_wait_request_handler_proc_p1 运行
+2020/12/01 21:58:05 [info] 30114: ngx_wait_request_handler 运行
+2020/12/01 21:58:05 [info] 30114: ngx_wait_request_handler_proc_plast 运行
+2020/12/01 21:58:05 [info] 30114: 非常好，收到了一个完整的数据包【包头+包体】！
+2020/12/01 21:58:05 [info] 30114: 执行开始---begin,tid=1194071808!
+2020/12/01 21:58:10 [info] 30114: 执行结束---end,tid=1194071808!
+2020/12/01 21:58:40 [info] 30114: ngx_wait_request_handler 运行
+2020/12/01 21:58:40 [info] 30114: c->curstat = _PKG_HD_INIT
+2020/12/01 21:58:40 [info] 30114: ngx_wait_request_handler_proc_p1 运行
+2020/12/01 21:58:40 [info] 30114: ngx_wait_request_handler 运行
+2020/12/01 21:58:40 [info] 30114: ngx_wait_request_handler_proc_plast 运行
+2020/12/01 21:58:40 [info] 30114: 非常好，收到了一个完整的数据包【包头+包体】！
+2020/12/01 21:58:40 [info] 30114: 执行开始---begin,tid=1185679104!
+2020/12/01 21:58:45 [info] 30114: 执行结束---end,tid=1185679104!
+2020/12/01 21:58:51 [info] 30114: ngx_wait_request_handler 运行
+2020/12/01 21:58:51 [info] 30114: reco <= 0
+2020/12/01 22:25:32 [notice] 30113: signal 17 (SIGCHLD) received from 30117
+2020/12/01 22:25:32 [alert] 30113: pid = 30117 exited on signal 9!
+2020/12/01 22:25:34 [notice] 30113: signal 17 (SIGCHLD) received from 30116
+2020/12/01 22:25:34 [alert] 30113: pid = 30116 exited on signal 9!
+2020/12/01 22:25:35 [notice] 30113: signal 17 (SIGCHLD) received from 30115
+2020/12/01 22:25:35 [alert] 30113: pid = 30115 exited on signal 9!
+2020/12/01 22:25:36 [notice] 30113: signal 17 (SIGCHLD) received from 30114
+2020/12/01 22:25:36 [alert] 30113: pid = 30114 exited on signal 9!
+2020/12/01 22:25:49 [info] 6498: 监听80端口成功!
+2020/12/01 22:25:49 [info] 6498: 监听443端口成功!
+2020/12/01 22:25:55 [info] 6500: 来了一个监听事件!
+2020/12/01 22:25:56 [info] 6500: ngx_wait_request_handler 运行
+2020/12/01 22:25:56 [info] 6500: c->curstat = _PKG_HD_INIT
+2020/12/01 22:25:56 [info] 6500: ngx_wait_request_handler_proc_p1 运行
+2020/12/01 22:25:56 [info] 6500: ngx_wait_request_handler 运行
+2020/12/01 22:25:56 [info] 6500: ngx_wait_request_handler_proc_plast 运行
+2020/12/01 22:25:56 [info] 6500: 执行了CLogicSocket::_HandleRegister()!
+2020/12/01 22:26:09 [info] 6500: ngx_wait_request_handler 运行
+2020/12/01 22:26:09 [info] 6500: c->curstat = _PKG_HD_INIT
+2020/12/01 22:26:09 [info] 6500: ngx_wait_request_handler_proc_p1 运行
+2020/12/01 22:26:09 [info] 6500: ngx_wait_request_handler 运行
+2020/12/01 22:26:09 [info] 6500: ngx_wait_request_handler_proc_plast 运行
+2020/12/01 22:26:09 [info] 6500: 执行了CLogicSocket::_HandleRegister()!
+2020/12/01 22:26:24 [info] 6500: ngx_wait_request_handler 运行
+2020/12/01 22:26:24 [info] 6500: reco <= 0
+2020/12/01 22:26:42 [notice] 6499: signal 17 (SIGCHLD) received from 6503
+2020/12/01 22:26:42 [alert] 6499: pid = 6503 exited on signal 9!
+2020/12/01 22:26:43 [notice] 6499: signal 17 (SIGCHLD) received from 6502
+2020/12/01 22:26:43 [alert] 6499: pid = 6502 exited on signal 9!
+2020/12/01 22:26:45 [notice] 6499: signal 17 (SIGCHLD) received from 6501
+2020/12/01 22:26:45 [alert] 6499: pid = 6501 exited on signal 9!
+2020/12/01 22:26:46 [notice] 6499: signal 17 (SIGCHLD) received from 6500
+2020/12/01 22:26:46 [alert] 6499: pid = 6500 exited on signal 9!
+2020/12/03 21:06:53 [info] 16023: 监听80端口成功!
+2020/12/03 21:06:53 [info] 16023: 监听443端口成功!
+2020/12/03 21:07:03 [info] 16028: 来了一个监听事件!
+2020/12/03 21:07:05 [info] 16028: ngx_wait_request_handler 运行
+2020/12/03 21:07:05 [info] 16028: c->curstat = _PKG_HD_INIT
+2020/12/03 21:07:05 [info] 16028: ngx_wait_request_handler_proc_p1 运行
+2020/12/03 21:07:05 [info] 16028: ngx_wait_request_handler 运行
+2020/12/03 21:07:05 [info] 16028: ngx_wait_request_handler_proc_plast 运行
+2020/12/03 21:07:05 [info] 16028: 执行了CLogicSocket::_HandleRegister()!
+2020/12/03 21:07:22 [info] 16028: ngx_wait_request_handler 运行
+2020/12/03 21:07:22 [info] 16028: c->curstat = _PKG_HD_INIT
+2020/12/03 21:07:22 [info] 16028: ngx_wait_request_handler_proc_p1 运行
+2020/12/03 21:07:22 [info] 16028: ngx_wait_request_handler 运行
+2020/12/03 21:07:22 [info] 16028: ngx_wait_request_handler_proc_plast 运行
+2020/12/03 21:07:22 [info] 16028: 执行了CLogicSocket::_HandleRegister()!
+2020/12/03 21:07:26 [info] 16028: ngx_wait_request_handler 运行
+2020/12/03 21:07:26 [info] 16028: reco <= 0
+2020/12/03 21:07:58 [notice] 16024: signal 17 (SIGCHLD) received from 16028
+2020/12/03 21:07:58 [alert] 16024: pid = 16028 exited on signal 9!
+2020/12/03 21:08:00 [notice] 16024: signal 17 (SIGCHLD) received from 16027
+2020/12/03 21:08:00 [alert] 16024: pid = 16027 exited on signal 9!
+2020/12/03 21:08:01 [notice] 16024: signal 17 (SIGCHLD) received from 16026
+2020/12/03 21:08:01 [alert] 16024: pid = 16026 exited on signal 9!
+2020/12/03 21:08:03 [notice] 16024: signal 17 (SIGCHLD) received from 16025
+2020/12/03 21:08:03 [alert] 16024: pid = 16025 exited on signal 9!

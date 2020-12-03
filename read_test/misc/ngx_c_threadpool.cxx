@@ -16,11 +16,20 @@ bool CThreadPool::m_shutdown = false;    //刚开始标记整个线程池的线�
 CThreadPool::CThreadPool(){
     m_iRunningThreadNum = 0;//正在运行的线程
     m_iLastEmgTime = 0; //就间隔时间写日志
+    m_iRecvMsgQueueCount = 0;
 }
 CThreadPool::~CThreadPool(){
-
+    clearMsgRecvQueue();
 }
-
+void CThreadPool::clearMsgRecvQueue(){
+    char *p;
+    CMemory *p_memory = CMemory::GetInstance();
+    while(!m_MsgRecvQueue.empty()){
+        p = m_MsgRecvQueue.front();
+        m_MsgRecvQueue.pop_front();
+        p_memory->FreeMemory(p);
+    }
+}
 bool CThreadPool::Create(int threadNum){
     ThreadItem *pNew;
     int err;
@@ -57,28 +66,27 @@ void * CThreadPool::ThreadFunc(void * threadData){
     while(true){
         err = pthread_mutex_lock(&m_pthreadMutex);
         if(err != 0) ngx_log_stderr(err,"CThreadPool::ThreadFunc()pthread_mutex_lock()失败，返回的错误码为%d!",err);//有问题，要及时报告
-        while((jobbuf = g_socket.outMsgRecvQueue()) == NULL && m_shutdown == false){
+        while(pThreadPoolObj->m_MsgRecvQueue.size() == 0 && m_shutdown == false){
             if(pThread->ifrunning == false){
                 pThread->ifrunning = true;
             }
             pthread_cond_wait(&m_pthreadCond, &m_pthreadMutex);
         }
-        err = pthread_mutex_unlock(&m_pthreadMutex);
-        if(err != 0)  ngx_log_stderr(err,"CThreadPool::ThreadFunc()pthread_cond_wait()失败，返回的错误码为%d!",err);//有问题，要及时报告
         if(m_shutdown){
-            if(jobbuf != NULL){
-                p_memory->FreeMemory(jobbuf);
-            }
-            break;
+            pthread_mutex_unlock(&m_pthreadMutex);
+            break;//还mutex顺带把线程消亡
         }
-        ++pThreadPoolObj->m_iRunningThreadNum;
-        ngx_log_error_core(NGX_LOG_INFO,0,"执行开始---begin,tid=%d!",tid);
-        //ngx_log_stderr(0,"执行开始---begin,tid=%ui!",tid);
-        sleep(5); //临时测试代码
-        //ngx_log_stderr(0,"执行结束---end,tid=%ui!",tid);
-         ngx_log_error_core(NGX_LOG_INFO,0,"执行结束---end,tid=%d!",tid);
+        //下述还在临界区
+        char *jobbuf = pThreadPoolObj->m_MsgRecvQueue.front();
+        pThreadPoolObj->m_MsgRecvQueue.pop_front();
+        --pThreadPoolObj->m_iRecvMsgQueueCount;
+        err = pthread_mutex_unlock(&m_pthreadMutex); 
+        if(err != 0)  ngx_log_stderr(err,"CThreadPool::ThreadFunc()pthread_cond_wait()失败，返回的错误码为%d!",err);//有问题，要及时报告
+        //解除临界区
+        ++ pThreadPoolObj->m_iRunningThreadNum;
+        g_socket.threadRecvProcFunc(jobbuf);
         p_memory->FreeMemory(jobbuf);
-        -- pThreadPoolObj->m_iRunningThreadNum;
+        --pThreadPoolObj->m_iRunningThreadNum;
     }
     return (void*)0;
 }
@@ -104,8 +112,22 @@ void CThreadPool::StopAll(){
     ngx_log_stderr(0,"CThreadPool::StopAll()成功返回，线程池中线程全部正常结束!");
     return;  
 }
-
-void CThreadPool::Call(int irmqc){
+void CThreadPool::inMsgRecvQueueAndSignal(char *buf){
+    int err = pthread_mutex_lock(&m_pthreadMutex);     
+    if(err != 0)
+    {
+        ngx_log_stderr(err,"CThreadPool::inMsgRecvQueueAndSignal()pthread_mutex_lock()失败，返回的错误码为%d!",err);
+    }
+    m_MsgRecvQueue.push_back(buf);
+    err = pthread_mutex_unlock(&m_pthreadMutex);
+    if(err != 0)
+    {
+        ngx_log_stderr(err,"CThreadPool::inMsgRecvQueueAndSignal()pthread_mutex_unlock()失败，返回的错误码为%d!",err);
+    }
+    Call();
+    return ;
+}
+void CThreadPool::Call(){
     int err = pthread_cond_signal(&m_pthreadCond);
     if(err != 0 )
     {

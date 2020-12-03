@@ -121,7 +121,11 @@ ssize_t CSocekt::recvproc(lpngx_connection_t c,char *buff,ssize_t buflen)  //ssi
         //ngx_log_stderr(0,"连接被客户端 非 正常关闭！");
 
         //这种真正的错误就要，直接关闭套接字，释放连接池中连接了
-        ngx_close_connection(c);
+        //ngx_close_connection(c);
+        if(close(c->fd) == -1){
+            ngx_log_error_core(NGX_LOG_ALERT,errno,"CSocekt::recvproc()中close_2(%d)失败!",c->fd);  
+        }
+        inRecyConnectQueue(c);
         return -1;
     }
 
@@ -147,20 +151,25 @@ void CSocekt::ngx_wait_request_handler_proc_p1(lpngx_connection_t c)
         c->irecvlen = m_iLenPkgHeader;
     }else{
         char *pTmpBuffer  = (char *)p_memory->AllocMemory(m_iLenMsgHeader + e_pkgLen,false); //分配内存【长度是 消息头长度  + 包头长度 + 包体长度】，最后参数先给false，表示内存不需要memset;
-        c->ifnewrecvMem = true;
-        c->pnewMemPointer = pTmpBuffer;
+        c->precvMemPointer = pTmpBuffer;
         LPSTRUC_MSG_HEADER ptmpMsgHeader = (LPSTRUC_MSG_HEADER)pTmpBuffer;
         ptmpMsgHeader->pConn = c;
         ptmpMsgHeader->iCurrsequence = c->iCurrsequence;
         pTmpBuffer += m_iLenMsgHeader;
-        memcpy(pTmpBuffer, pPkgHeader, m_iLenPkgHeader);
-        if(e_pkgLen == m_iLenPkgHeader){
+        memcpy(pTmpBuffer,pPkgHeader,m_iLenPkgHeader);
+        if(e_pkgLen == m_iLenPkgHeader)
+        {
+            //该报文只有包头无包体【我们允许一个包只有包头，没有包体】
+            //这相当于收完整了，则直接入消息队列待后续业务逻辑线程去处理吧
             ngx_wait_request_handler_proc_plast(c);
-        }else{
-            c->curStat = _PKG_BD_INIT;
-            c->precvbuf = pTmpBuffer + m_iLenPkgHeader;
-            c->irecvlen = e_pkgLen - m_iLenPkgHeader;
-        }
+        } 
+        else
+        {
+            //开始收包体，注意我的写法
+            c->curStat = _PKG_BD_INIT;                   //当前状态发生改变，包头刚好收完，准备接收包体	    
+            c->precvbuf = pTmpBuffer + m_iLenPkgHeader;  //pTmpBuffer指向包头，这里 + m_iLenPkgHeader后指向包体 weizhi
+            c->irecvlen = e_pkgLen - m_iLenPkgHeader;    //e_pkgLen是整个包【包头+包体】大小，-m_iLenPkgHeader【包头】  = 包体
+        }      
     }
     return ;
 }
@@ -168,31 +177,79 @@ void CSocekt::ngx_wait_request_handler_proc_plast(lpngx_connection_t c)
 {
     int irmqc = 0;
     ngx_log_error_core(NGX_LOG_INFO,0,"ngx_wait_request_handler_proc_plast 运行");
-    inMsgRecvQueue(c->pnewMemPointer, irmqc);
-    g_threadpool.Call(irmqc);
-    c->ifnewrecvMem = false;
-    c->pnewMemPointer = NULL;
+    //inMsgRecvQueue(c->pnewMemPointer, irmqc);
+    g_threadpool.inMsgRecvQueueAndSignal(c->precvMemPointer);
+    c->precvMemPointer = NULL;
     c->curStat = _PKG_HD_INIT;
     c->precvbuf = c->dataHeadInfo;
     c->irecvlen = m_iLenPkgHeader;
     return ;
 }
+ssize_t CSocekt::sendproc(lpngx_connection_t c,char *buff,ssize_t size)  //ssize_t是有符号整型，在32位机器上等同与int，在64位机器上等同与long int，size_t就是无符号型的ssize_t
+{
+    //这里参考借鉴了官方nginx函数ngx_unix_send()的写法
+    ssize_t   n;
 
+    for ( ;; )
+    {
 
-void CSocekt::inMsgRecvQueue(char *buf, int &irmqc){
-    CLock lock(&m_recvMessageQueueMutex);
-    m_MsgRecvQueue.push_back(buf);
-    ++m_iRecvMsgQueueCount;
-    irmqc = m_iRecvMsgQueueCount;
-    //为了测试方便，因为本函数意味着收到了一个完整的数据包，所以这里打印一个信息
-    ngx_log_error_core(NGX_LOG_INFO,0,"非常好，收到了一个完整的数据包【包头+包体】！");
-    return ;
+        n = send(c->fd, buff, size, 0); //send()系统函数， 最后一个参数flag，一般为0； 
+        if(n > 0) //成功发送了一些数据
+        {        
+            //发送成功一些数据，但发送了多少，我们这里不关心，也不需要再次send
+            //这里有两种情况
+            //(1) n == size也就是想发送多少都发送成功了，这表示完全发完毕了
+            //(2) n < size 没法送完毕，那肯定是发送缓冲区满了，所以也不必要重试发送，直接返回吧
+            return n; //返回本次发送的字节数
+        }
+
+        if(n == 0)
+        {
+            //send()返回0？ 一般recv()返回0表示断开,send()返回0，当做正常处理吧；我个人认为send()返回0，要么你发送的字节是0，要么对端可能断开。
+            //网上找资料：send=0表示超时，对方主动关闭了连接过程
+            //遵循一个原则，连接断开，我们并不在send动作里处理，集中到recv那里处理，否则send,recv都处理都处理连接断开会乱套
+            //连接断开epoll会通知并且 recvproc()里会处理，不在这里处理
+            return 0;
+        }
+
+        if(errno == EAGAIN)  //这东西应该等于EWOULDBLOCK
+        {
+            //内核缓冲区满，这个不算错误
+            return -1;  //表示发送缓冲区满了
+        }
+
+        if(errno == EINTR) 
+        {
+            //这个应该也不算错误 ，收到某个信号导致send产生这个错误？
+            //参考官方的写法，打印个日志，其他啥也没干，那就是等下次for循环重新send试一次了
+            ngx_log_stderr(errno,"CSocekt::sendproc()中send()失败.");  //打印个日志看看啥时候出这个错误
+            //其他不需要做什么，等下次for循环吧            
+        }
+        else
+        {
+            //走到这里表示是其他错误码，都表示错误，错误我也不断开socket，我也依然等待recv()来统一处理断开，因为我是多线程，send()也处理断开，recv()也处理断开，很难处理好
+            return -2;    
+        }
+    } //end for
 }
-char* CSocekt::outMsgRecvQueue(){
-    CLock lock(&m_recvMessageQueueMutex);
-    if(m_MsgRecvQueue.empty())  return NULL;
-    char *result = m_MsgRecvQueue.front();
-    m_MsgRecvQueue.pop_front();
-    --m_iRecvMsgQueueCount;
-    return result;
+void CSocekt::threadRecvProcFunc(char *pMsgBuf)
+{   
+    return;
 }
+// void CSocekt::inMsgRecvQueue(char *buf, int &irmqc){
+//     CLock lock(&m_recvMessageQueueMutex);
+//     m_MsgRecvQueue.push_back(buf);
+//     ++m_iRecvMsgQueueCount;
+//     irmqc = m_iRecvMsgQueueCount;
+//     //为了测试方便，因为本函数意味着收到了一个完整的数据包，所以这里打印一个信息
+//     ngx_log_error_core(NGX_LOG_INFO,0,"非常好，收到了一个完整的数据包【包头+包体】！");
+//     return ;
+// }
+// char* CSocekt::outMsgRecvQueue(){
+//     CLock lock(&m_recvMessageQueueMutex);
+//     if(m_MsgRecvQueue.empty())  return NULL;
+//     char *result = m_MsgRecvQueue.front();
+//     m_MsgRecvQueue.pop_front();
+//     --m_iRecvMsgQueueCount;
+//     return result;
+// }
