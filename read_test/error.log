@@ -367,3 +367,34 @@
 2020/12/03 21:08:01 [alert] 16024: pid = 16026 exited on signal 9!
 2020/12/03 21:08:03 [notice] 16024: signal 17 (SIGCHLD) received from 16025
 2020/12/03 21:08:03 [alert] 16024: pid = 16025 exited on signal 9!
+2020/12/04 20:50:20 [info] 19781: 监听80端口成功!
+2020/12/04 20:50:20 [info] 19781: 监听443端口成功!
+2020/12/04 20:50:39 [info] 19786: 来了一个监听事件!
+2020/12/04 20:50:40 [info] 19786: ngx_wait_request_handler 运行
+2020/12/04 20:50:40 [info] 19786: c->curstat = _PKG_HD_INIT
+2020/12/04 20:50:40 [info] 19786: ngx_wait_request_handler_proc_p1 运行
+2020/12/04 20:50:40 [info] 19786: ngx_wait_request_handler 运行
+2020/12/04 20:50:40 [info] 19786: ngx_wait_request_handler_proc_plast 运行
+2020/12/04 20:50:40 [info] 19786: 执行了CLogicSocket::_HandleRegister()!
+2020/12/04 20:50:41 [info] 19786: ngx_wait_request_handler 运行
+2020/12/04 20:50:41 [info] 19786: c->curstat = _PKG_HD_INIT
+2020/12/04 20:50:41 [info] 19786: ngx_wait_request_handler_proc_p1 运行
+2020/12/04 20:50:41 [info] 19786: ngx_wait_request_handler 运行
+2020/12/04 20:50:41 [info] 19786: ngx_wait_request_handler_proc_plast 运行
+2020/12/04 20:50:41 [info] 19786: 执行了CLogicSocket::_HandleRegister()!
+2020/12/04 20:50:42 [info] 19786: ngx_wait_request_handler 运行
+2020/12/04 20:50:42 [info] 19786: c->curstat = _PKG_HD_INIT
+2020/12/04 20:50:42 [info] 19786: ngx_wait_request_handler_proc_p1 运行
+2020/12/04 20:50:42 [info] 19786: ngx_wait_request_handler 运行
+2020/12/04 20:50:42 [info] 19786: ngx_wait_request_handler_proc_plast 运行
+2020/12/04 20:50:42 [info] 19786: 执行了CLogicSocket::_HandleRegister()!
+2020/12/04 20:50:43 [info] 19786: ngx_wait_request_handler 运行
+2020/12/04 20:50:43 [info] 19786: reco <= 0
+2020/12/04 20:51:09 [notice] 19782: signal 17 (SIGCHLD) received from 19786
+2020/12/04 20:51:09 [alert] 19782: pid = 19786 exited on signal 9!
+2020/12/04 20:51:10 [notice] 19782: signal 17 (SIGCHLD) received from 19785
+2020/12/04 20:51:10 [alert] 19782: pid = 19785 exited on signal 9!
+2020/12/04 20:51:12 [notice] 19782: signal 17 (SIGCHLD) received from 19784
+2020/12/04 20:51:12 [alert] 19782: pid = 19784 exited on signal 9!
+2020/12/04 20:51:13 [notice] 19782: signal 17 (SIGCHLD) received from 19783
+2020/12/04 20:51:13 [alert] 19782: pid = 19783 exited on signal 9!

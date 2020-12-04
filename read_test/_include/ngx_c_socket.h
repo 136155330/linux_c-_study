@@ -67,7 +67,7 @@ struct ngx_connection_s//连接池的节点
 	time_t                    inRecyTime;                     //入到资源回收站里去的时间
 
 	//--------------------------------------------------
-	lpngx_connection_t        next;                //这是个指针【等价于传统链表里的next成员：后继指针】，指向下一个本类型对象，用于把空闲的连接池对象串起来构成一个单向链表，方便取用
+	//lpngx_connection_t        next;                //这是个指针【等价于传统链表里的next成员：后继指针】，指向下一个本类型对象，用于把空闲的连接池对象串起来构成一个单向链表，方便取用
 };
 typedef struct _STRUC_MSG_HEADER{
 	lpngx_connection_t pConn; //指向port fd

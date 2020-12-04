@@ -73,6 +73,7 @@ void freeresource()
     }
 }
 int main(int argc, char *const *argv){
+    g_stopEvent = 0;
     ngx_process = NGX_PROCESS_MASTER;
     ngx_pid = getpid();
     ngx_parent = getppid(); 

@@ -164,7 +164,7 @@ lpngx_connection_t CSocekt::ngx_get_connection(int isock)
     c->precvbuf = c->dataHeadInfo;                       //收包我要先收到这里来，因为我要先收包头，所以收数据的buff直接就是dataHeadInfo
     c->irecvlen = sizeof(COMM_PKG_HEADER);               //这里指定收数据的长度，这里先要求收包头这么长字节的数据
 
-    
+     
     c->precvMemPointer = NULL;                            //既然没new内存，那自然指向的内存地址先给NULL
     c->iThrowsendCount = 0;                              //原子的
     c->psendMemPointer = NULL;                          //发送数据头指针记录
@@ -331,3 +331,7 @@ void CSocekt::ngx_close_connection(lpngx_connection_t pConn)
     }
     return;
 }
+
+
+#include <iostream>
+#include <cstdio>

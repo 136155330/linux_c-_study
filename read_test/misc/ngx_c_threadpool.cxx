@@ -84,7 +84,8 @@ void * CThreadPool::ThreadFunc(void * threadData){
         if(err != 0)  ngx_log_stderr(err,"CThreadPool::ThreadFunc()pthread_cond_wait()失败，返回的错误码为%d!",err);//有问题，要及时报告
         //解除临界区
         ++ pThreadPoolObj->m_iRunningThreadNum;
-        g_socket.threadRecvProcFunc(jobbuf);
+        g_socket.threadRecvProcFunc(jobbuf); //个人感觉对应的锁释放应该放这里
+        //因为没有共同使用的变量所以不存在问题
         p_memory->FreeMemory(jobbuf);
         --pThreadPoolObj->m_iRunningThreadNum;
     }

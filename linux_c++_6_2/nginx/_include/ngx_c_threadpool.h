@@ -1,7 +1,6 @@
 ﻿
 #ifndef __NGX_THREADPOOL_H__
 #define __NGX_THREADPOOL_H__
-
 #include <vector>
 #include <pthread.h>
 #include <atomic>   //c++11里的原子操作

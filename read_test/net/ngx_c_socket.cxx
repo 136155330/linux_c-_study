@@ -351,15 +351,22 @@ int CSocekt::ngx_epoll_oper_event(
     struct epoll_event ev;
     memset(&ev, 0, sizeof(ev));
     if(eventtype == EPOLL_CTL_ADD){
-        ev.data.ptr = (void *)pConn;
+        //ev.data.ptr = (void *)pConn;
         ev.events = flag;
         pConn->events = flag;
     }else if(eventtype == EPOLL_CTL_MOD){
-
+        ev.events = pConn->events;
+        if(bcaction == 0)   ev.events |= flag;
+        else if(bcaction == 1)   ev.events &= ~flag;
+        else{
+            ev.events = flag;
+        }
+        pConn->events = ev.events;
     }
     else{
         return 1;
     }
+    ev.data.ptr = (void *)pConn;
     if(epoll_ctl(m_epollhandle, eventtype, fd, &ev) == -1){
         ngx_log_stderr(errno,"CSocekt::ngx_epoll_oper_event()中epoll_ctl(%d,%ud,%ud,%d)失败.",fd,eventtype,flag,bcaction);    
         return -1;
